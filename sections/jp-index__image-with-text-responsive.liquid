@@ -2,7 +2,7 @@
   Code created by JadePuma
   Last editted - 5/11/24
 {% endcomment %}
-
+{% assign ss = section.settings %}
 {%- assign image = section.settings.image -%}
 {%- assign link = section.settings.link -%}
 {%- assign pretext = section.settings.pretext -%}
@@ -38,17 +38,79 @@
 {%- assign mobile_subtitle_alpha = mobile_subtitle_color | color_extract: 'alpha' -%}
 {%- assign caption_border_alpha = section.settings.border_color | color_extract: 'alpha' -%}
 
-{% if background_color_alpha != 100 %}
-  {% assign caption_content_BG = section.settings.background_color | color_modify: 'alpha', background_color_alpha %}
-{% else %}
-  {% assign caption_content_BG = section.settings.background_color %}
-{% endif %}
+  {% liquid
+    assign caption_content_BG = settings.shop_bg_color 
+    if ss.background_color != blank 
+      assign caption_content_BG = ss.background_color
+    endif
+    
+    if background_color_alpha != 100
+      assign caption_content_BG = caption_content_BG | color_modify: 'alpha', background_color_alpha
+    endif
 
+
+    assign caption_content_border_color = settings.border_color
+    if ss.border_color != blank
+      assign caption_content_border_color = ss.border_color
+    endif
+
+    assign mobile_text_alignment = ss.text_alignment_mobile
+    if mobile_text_alignment == 'same_as_desktop'
+      assign mobile_text_alignment = ss.text_alignment
+    endif
+
+    assign mobile_horizontal_position = ss.text_horizontal_position_mobile
+    if mobile_horizontal_position == 'same_as_desktop'
+      assign mobile_horizontal_position = ss.text_horizontal_position
+    endif
+
+    assign mobile_vertical_position = ss.text_vertical_position_mobile
+    if mobile_vertical_position == 'same_as_desktop'
+      assign mobile_vertical_position = ss.text_vertical_position
+    endif
+  %}
+
+
+  {% capture mobile_vertical_position %}
+
+    {% liquid
+    assign vertical_position = ss.text_vertical_position_mobile
+    if ss.text_vertical_position_mobile == 'same_as_desktop'
+      assign vertical_position = ss.text_vertical_position
+    endif
+    
+    %}
+
+    {% if vertical_position == "bottom" %}
+       bottom:20px;
+    {% elsif vertical_position == "middle" %}
+       top:50%;
+       transform:translateY(-50%);
+    {% elsif vertical_position == "top" %}
+       top:10px;
+    {% endif %}
+
+  {% endcapture %}
+
+  <script>
+  console.log('{{ caption_content_BG }}')
+</script>
+
+
+  
+      {% comment %}
+          {% if background_color_alpha != 100 %}
+            {% assign caption_content_BG = section.settings.background_color | color_modify: 'alpha', background_color_alpha %}
+          {% else %}
+            {% assign caption_content_BG = section.settings.background_color %}
+          {% endif %}
+      {% endcomment %}
 {% comment %} Section specific CSS {% endcomment %}
 {% capture section_css -%}
   .caption-content {
-    background-color:{{caption_content_BG}};
-    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    background:{{caption_content_BG}};
+    border: {{ section.settings.border_width }}px {{ ss.border_type }} {{ caption_content_border_color }};
+    border-radius:{{ ss.border_radius }}px;
   }
 
   .image-with-text-overlay__heading {
@@ -109,8 +171,6 @@
             id: section.id
     %}
 
-
-
     .section-{{id}}{
        position:relative;
        {% unless mobile_text_below_media %}
@@ -122,14 +182,7 @@
        display:none !important;
        {% unless mobile_text_below_media %}
        position:absolute;
-       {% if section.settings.text_vertical_position_mobile == "bottom" %}
-       bottom:20px;
-       {% elsif section.settings.text_vertical_position_mobile == "middle" %}
-       top:50%;
-       transform:translateY(-50%);
-       {% elsif section.settings.text_vertical_position_mobile == "top" %}
-       top:10px;
-           {% endif %}
+       {{ mobile_vertical_position | replace: ' ', ''}}
        {% endunless %}
        width:100%;
        text-align:center;
@@ -142,8 +195,9 @@
       flex-direction:column;
       height:100%;
       justify-content:center;
-      background-color: {{caption_content_BG}};
-      border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+      background: {{caption_content_BG}};
+      border: {{ section.settings.border_width }}px {{ ss.border_type }} {{ caption_content_border_color }};
+      border-radius:{{ ss.border_radius }}px;
       margin:10px;
   }
 
@@ -156,39 +210,8 @@
   }
 
   .section-{{id}} h1{
-    font-size:55px !important;
-    line-height:65px !important;
-  }
-
-  @media only screen and (max-width: 1300px) {
-      .section-{{id}} h1{
-      font-size:40px !important;
-      line-height:50px !important;
-    }
-    .banner__subheading{
-        font-size: 22px !important;
-    }
-  }
-
-  @media only screen and (max-width: 1065px) {
-      .section-{{id}} h1{
-      font-size:35px !important;
-      line-height:45px !important;
-    }
-    .banner__subheading{
-        font-size: 18px !important;
-    }
-  }
-
-  @media only screen and (max-width: 900px) {
-    .section-{{id}} h1{
-    font-size:30px !important;
-    line-height:40px !important;
-    }
-
-    .banner__subheading{
-      font-size: 16px !important;
-    }
+    font-size:{{ ss.banner_heading_size }} !important;
+    /* line-height:65px !important; */
   }
 
   @media only screen and (max-width: 798px) {
@@ -196,8 +219,16 @@
         display:none !important;
       }
     .mobile-only-text{
-      display:block !important;
+      display:flex !important;
+      justify-content:{{ mobile_horizontal_position }};
       min-width:0;
+    }
+
+        #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      padding-left: {{ section.settings.padding_left_mobile }}px !important;
+      padding-right: {{ section.settings.padding_right_mobile }}px !important;
     }
 
   }
@@ -319,8 +350,8 @@
         or button_1 != blank
         or button_2 != blank
       %}
-        <div class="mobile-only-text">
-          <div class="mobile-only-text-container text-align-{{ section.settings.text_alignment }}">
+        <div class="mobile-only-text text-align-{{ mobile_horizontal_position }} align-{{ ss.text_vertical_position_mobile }}">
+          <div class="mobile-only-text-container text-align-{{ mobile_text_alignment }}">
             {% if pretext_mobile != blank %}
               <div class="image-with-text-overlay__preheading banner__subheading pretext subtitle">
                 {{ pretext_mobile }}
@@ -363,16 +394,22 @@
   </div>
 </section>
 
+
+
 {% schema %}
 {
   "name": "JP Image with txt overlay",
   "class": "image-with-text-overlay overlaid-header-option",
   "templates": ["index", "page", "blog", "article", "collection", "product", "cart"],
   "settings": [
+        {
+      "type": "header",
+      "content": "Image Link"
+    },
     {
       "type": "url",
       "id": "link",
-      "label": "Link",
+      "label": "Background Image Link",
       "info": "Links entire image"
     },
     {
@@ -388,7 +425,8 @@
     {
       "type": "richtext",
       "id": "pretext",
-      "label": "Preheading"
+      "label": "Preheading",
+      "default":"<p>Preheading</p>"
     },
     {
       "type": "text",
@@ -399,16 +437,44 @@
     {
       "type": "richtext",
       "id": "subtitle",
-      "label": "Subheading"
+      "label": "Subheading",
+      "default":"<p>Additional info in the subheading</p>"
+    },
+        {
+      "type": "color",
+      "id": "pretext_color",
+      "label": "Preheading"
     },
     {
-      "type": "range",
-      "id": "text_width",
-      "label": "Text width",
-      "min": 40,
-      "max": 100,
-      "default": 40,
-      "unit": "%"
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading"
+    },
+      {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
     },
     {
       "type": "select",
@@ -450,21 +516,16 @@
       ],
       "default": "middle"
     },
-    {
-      "type": "color",
-      "id": "pretext_color",
-      "label": "Preheading"
+        {
+      "type": "range",
+      "id": "text_width",
+      "label": "Text width",
+      "min": 40,
+      "max": 100,
+      "default": 70,
+      "unit": "%"
     },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading"
-    },
-    {
-      "type": "color",
-      "id": "subheading_color",
-      "label": "Subheading"
-    },
+
     {
       "type": "header",
       "content": "Mobile"
@@ -474,6 +535,12 @@
       "id": "mobile_image",
       "label": "Mobile image",
       "info": "900 x 1800px recommended"
+    },
+                {
+      "type": "checkbox",
+      "id": "mobile_text_below_image",
+      "label": "Show text below image",
+      "default": false
     },
     {
       "type": "richtext",
@@ -491,33 +558,8 @@
       "id": "subtitle_mobile",
       "label": "Subheading"
     },
-    {
-      "type": "select",
-      "id": "text_vertical_position_mobile",
-      "label": "Text box position",
-      "options": [
+
         {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "middle",
-          "label": "Middle"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        }
-      ],
-      "default": "middle"
-    },
-    {
-      "type": "checkbox",
-      "id": "mobile_text_below_image",
-      "label": "Show text below image",
-      "default": false
-    },
-    {
       "type": "color",
       "id": "pretext_color_mobile",
       "label": "Preheading"
@@ -532,21 +574,15 @@
       "id": "subheading_color_mobile",
       "label": "Subheading"
     },
-    {
-      "type": "header",
-      "content": "Common"
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_h1",
-      "label": "Use H1 for heading",
-      "default": false
-    },
-    {
+        {
       "type": "select",
-      "id": "text_alignment",
-      "label": "Text alignment",
+      "id": "text_alignment_mobile",
+      "label": "Text Alignment",
       "options": [
+        {
+          "value": "same_as_desktop",
+          "label": "Same as desktop"
+        },
         {
           "value": "left",
           "label": "Left"
@@ -560,30 +596,81 @@
           "label": "Right"
         }
       ],
-      "default": "center"
+      "default": "same_as_desktop"
     },
+    {
+      "type": "select",
+      "id": "text_horizontal_position_mobile",
+      "label": "Horizontal position",
+      "options": [
+                {
+          "value": "same_as_desktop",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "same_as_desktop"
+    },
+    {
+      "type": "select",
+      "id": "text_vertical_position_mobile",
+      "label": "Vertical text position",
+      "options": [
+                {
+          "value": "same_as_desktop",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "same_as_desktop"
+    },
+       
     {
       "type": "header",
       "content": "Text background"
     },
+
     {
       "type": "color",
       "id": "background_color",
-      "label": "Background"
+      "label": "Background color"
     },
+
     {
       "type": "range",
       "id": "background_opacity",
       "label": "Background opacity",
       "min": 0,
       "max": 100,
-      "default": 0,
+      "default": 50,
       "unit": "%"
     },
     {
       "type": "color",
       "id": "border_color",
-      "label": "Border"
+      "label": "Border color"
     },
     {
       "type": "range",
@@ -594,6 +681,59 @@
       "default": 0,
       "unit": "px"
     },
+        {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+          "type": "select",
+          "id": "border_type",
+          "label": "Border Type",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "dotted",
+              "label": "Dotted"
+            },
+            {
+              "value": "dashed",
+              "label": "Dashed"
+            },
+            {
+              "value": "inset",
+              "label": "Inset"
+            },
+            {
+              "value": "outset",
+              "label": "Outset"
+            },
+            {
+              "value": "double",
+              "label": "Double"
+            },
+            {
+              "value": "groove",
+              "label": "Groove"
+            },
+            {
+              "value": "ridge",
+              "label": "Ridge"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
     {
       "type": "header",
       "content": "Button 1"
@@ -601,7 +741,8 @@
     {
       "type": "text",
       "id": "button_1",
-      "label": "Button 1 label"
+      "label": "Button 1 label",
+      "default":"Button 1"
     },
     {
       "type": "url",
@@ -639,7 +780,8 @@
     {
       "type": "text",
       "id": "button_2",
-      "label": "Button 2 label"
+      "label": "Button 2 label",
+      "default":"Button 2"
     },
     {
       "type": "url",
@@ -669,6 +811,16 @@
         }
       ],
       "default": "button--secondary"
+    },
+        {
+      "type": "header",
+      "content": "Common"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_h1",
+      "label": "Use H1 for heading",
+      "default": false
     },
     {
       "type": "header",
@@ -765,6 +917,46 @@
           "label": "Slide in right"
         }
       ]
+    },
+     {
+      "type": "header",
+      "content": "Mobile Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "unit": "px"
+    },
+     {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "label": "Left spacing",
+      "min": 0,
+      "max": 80,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "label": "Right spacing",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "unit": "px"
     },
     {
       "type": "header",
