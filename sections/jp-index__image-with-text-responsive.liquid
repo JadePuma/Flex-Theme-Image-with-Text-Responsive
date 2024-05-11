@@ -1,8 +1,7 @@
 {% comment %}
 
 Code created by JadePuma
-Instructions - https://jadepuma.com/blogs/shopify-tutorials/responsive-image-with-text-overlay-section-flex-theme
-Last editted - 5/9/24
+Last editted - 5/11/24
  
 {% endcomment %}
 
@@ -30,6 +29,12 @@ Last editted - 5/9/24
 {% else %}
   {%- assign buttons = false -%}
 {% endif %}
+
+
+<script>
+  console.log('{{section.settings.mobile_image }}')
+  console.log('{{section.settings.mobile_image2 }}')
+</script>
 
 {% comment %} Is the color set to transparent? {% endcomment %}
 {%- assign background_color_alpha = section.settings.background_opacity | divided_by: 100.00 -%}
@@ -235,7 +240,7 @@ Last editted - 5/9/24
               {% endif %}">
     <div class="image-with-text-overlay__banner columns one-whole image-crop-{{ mobile_text_crop }}">
 
-      {% if mobile_image != blank %}
+      {% if section.settings.mobile_image != blank %}
         {%- assign hide_mobile = 'is-hidden-mobile-only' -%}
       {% endif %}
 
@@ -247,14 +252,18 @@ Last editted - 5/9/24
                 additional_classes: hide_mobile
         %}
       {% else %}
+          <div class="{{ hide_mobile }}">
         {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            
+          </div>
       {% endif %}
+      
 
-      {% if mobile_image != blank %}
+      {% if section.settings.mobile_image != blank %}
         <div class="is-hidden-desktop-only">
           {% render 'image-element',
-                  image: mobile_image,
-                  alt: mobile_image.alt,
+                  image: section.settings.mobile_image,
+                  alt: section.settings.mobile_image.alt,
                   stretch_width: true
           %}
         </div>
@@ -370,7 +379,7 @@ Last editted - 5/9/24
 
 {% schema %}
 {
-  "name": "JP Image w/text Over Resp",
+  "name": "JP Image with txt Overlay",
   "class": "image-with-text-overlay overlaid-header-option",
   "templates":["index", "page", "blog", "article", "collection", "product", "cart"],
   "settings": [
@@ -399,7 +408,7 @@ Last editted - 5/9/24
       "type": "text",
       "id": "title",
       "label": "Heading",
-      "default": "Image with Text Overlay"
+      "default": "JP Image with text Overlay"
     },
     {
       "type": "richtext",
@@ -477,6 +486,12 @@ Last editted - 5/9/24
     {
       "type": "image_picker",
       "id": "mobile_image",
+      "label": "Mobile image",
+      "info": "900 x 1800px recommended"
+    },
+        {
+      "type": "image_picker",
+      "id": "mobile_image2",
       "label": "Mobile image",
       "info": "900 x 1800px recommended"
     },
@@ -789,7 +804,7 @@ Last editted - 5/9/24
   ],
   "presets": [
     {
-      "name": "JP Image w/text Over Resp",
+      "name": "JP Image with txt Overlay",
       "category": "JadePuma"
     }
   ]
