@@ -30,12 +30,6 @@ Last editted - 5/11/24
   {%- assign buttons = false -%}
 {% endif %}
 
-
-<script>
-  console.log('{{section.settings.mobile_image }}')
-  console.log('{{section.settings.mobile_image2 }}')
-</script>
-
 {% comment %} Is the color set to transparent? {% endcomment %}
 {%- assign background_color_alpha = section.settings.background_opacity | divided_by: 100.00 -%}
 {%- assign heading_alpha = section.settings.heading_color | color_extract: 'alpha' -%}
@@ -486,12 +480,6 @@ Last editted - 5/11/24
     {
       "type": "image_picker",
       "id": "mobile_image",
-      "label": "Mobile image",
-      "info": "900 x 1800px recommended"
-    },
-        {
-      "type": "image_picker",
-      "id": "mobile_image2",
       "label": "Mobile image",
       "info": "900 x 1800px recommended"
     },
