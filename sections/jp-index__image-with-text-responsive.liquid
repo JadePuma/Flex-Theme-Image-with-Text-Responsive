@@ -134,15 +134,14 @@ Last editted - 5/9/24
      transform:translateY(-50%);
      {% elsif section.settings.text_vertical_position_mobile == "top" %}
      top:10px;
-     {% endif %}
-     height: {{ section.settings.text_height_mobile}}%;
+         {% endif %}
      {% endunless %}
      width:100%;
      text-align:center;
   }
 
 .mobile-only-text-container{
-    padding:0px 15px;
+    padding:10px 15px;
 
     display:flex;
     flex-direction:column;
@@ -498,15 +497,6 @@ Last editted - 5/9/24
       "label": "Subheading"
     },
     {
-      "type": "range",
-      "id": "text_height_mobile",
-      "label": "Text box height",
-      "min": 25,
-      "max": 100,
-      "default": 40,
-      "unit": "%"
-    },
-{
       "type": "select",
       "id": "text_vertical_position_mobile",
       "label": "Text box position",
