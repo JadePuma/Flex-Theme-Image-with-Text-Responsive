@@ -1,8 +1,6 @@
 {% comment %}
-
-Code created by JadePuma
-Last editted - 5/11/24
- 
+  Code created by JadePuma
+  Last editted - 5/11/24
 {% endcomment %}
 
 {%- assign image = section.settings.image -%}
@@ -46,8 +44,6 @@ Last editted - 5/11/24
   {% assign caption_content_BG = section.settings.background_color %}
 {% endif %}
 
-
-
 {% comment %} Section specific CSS {% endcomment %}
 {% capture section_css -%}
   .caption-content {
@@ -71,194 +67,195 @@ Last editted - 5/11/24
 {% comment %} Section specific CSS {% endcomment %}
 
 {% style %}
-  {% render 'css-loop',
-          css: section_css,
-          id: section.id
-  %}
+    {% render 'css-loop',
+            css: section_css,
+            id: section.id
+    %}
 
-  @media only screen and (max-width: 480px) {
-    #shopify-section-{{ section.id }} .image-with-text-overlay__heading {
-      color: {% if mobile_headline_alpha != 0 %}{{ mobile_headline_color}}{% endif %};
+    @media only screen and (max-width: 480px) {
+      #shopify-section-{{ section.id }} .image-with-text-overlay__heading {
+        color: {% if mobile_headline_alpha != 0 %}{{ mobile_headline_color}}{% endif %};
+      }
+      #shopify-section-{{ section.id }} .image-with-text-overlay__preheading {
+        color: {% if mobile_preheading_alpha != 0 %}{{ mobile_preheading_color}}{% endif %};
+      }
+      #shopify-section-{{ section.id }} .image-with-text-overlay__subheading {
+        color: {% if mobile_subtitle_alpha != 0 %}{{ mobile_subtitle_color}}{% endif %};
+      }
     }
-    #shopify-section-{{ section.id }} .image-with-text-overlay__preheading {
-      color: {% if mobile_preheading_alpha != 0 %}{{ mobile_preheading_color}}{% endif %};
+
+    @media only screen and (min-width: 480px) {
+      #shopify-section-{{ section.id }} .caption-content {
+        width: {{ section.settings.text_width }}%;
+        max-width: {{ section.settings.text_width }}%;
+        min-width:0px !important;
+      }
     }
-    #shopify-section-{{ section.id }} .image-with-text-overlay__subheading {
-      color: {% if mobile_subtitle_alpha != 0 %}{{ mobile_subtitle_color}}{% endif %};
+
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.padding_left }}px;
+      padding-right: {{ section.settings.padding_right }}px;
+      {% if section.settings.width == 'wide' %}
+        width: 100%;
+      {% elsif section.settings.width == 'half' %}
+        width: 50%;
+      {% endif %}
     }
-  }
 
-  @media only screen and (min-width: 480px) {
-    #shopify-section-{{ section.id }} .caption-content {
-      width: {{ section.settings.text_width }}%;
-      max-width: {{ section.settings.text_width }}%;
-      min-width:0px !important;
+    {% render 'css-loop',
+            css: section.settings.custom_css,
+            id: section.id
+    %}
+
+
+
+    .section-{{id}}{
+       position:relative;
+       {% unless mobile_text_below_media %}
+       overflow:hidden;
+       {% endunless %}
     }
+
+    .mobile-only-text{
+       display:none !important;
+       {% unless mobile_text_below_media %}
+       position:absolute;
+       {% if section.settings.text_vertical_position_mobile == "bottom" %}
+       bottom:20px;
+       {% elsif section.settings.text_vertical_position_mobile == "middle" %}
+       top:50%;
+       transform:translateY(-50%);
+       {% elsif section.settings.text_vertical_position_mobile == "top" %}
+       top:10px;
+           {% endif %}
+       {% endunless %}
+       width:100%;
+       text-align:center;
+    }
+
+  .mobile-only-text-container{
+      padding:10px 15px;
+
+      display:flex;
+      flex-direction:column;
+      height:100%;
+      justify-content:center;
+      background-color: {{caption_content_BG}};
+      border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+      margin:10px;
   }
 
-  #shopify-section-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    padding-left: {{ section.settings.padding_left }}px;
-    padding-right: {{ section.settings.padding_right }}px;
-    {% if section.settings.width == 'wide' %}
-      width: 100%;
-    {% elsif section.settings.width == 'half' %}
-      width: 50%;
-    {% endif %}
+  .banner__heading_mobile{
+      font-size: 8vw;
   }
 
-  {% render 'css-loop',
-          css: section.settings.custom_css,
-          id: section.id
-  %}
-
-
-
-  .section-{{id}}{
-     position:relative;
-     {% unless mobile_text_below_media %}
-     overflow:hidden;
-     {% endunless %}
+  .banner__subheading_mobile{
+      font-size:5vw !important;
   }
 
-  .mobile-only-text{
-     display:none !important;
-     {% unless mobile_text_below_media %}
-     position:absolute;
-     {% if section.settings.text_vertical_position_mobile == "bottom" %}
-     bottom:20px;
-     {% elsif section.settings.text_vertical_position_mobile == "middle" %}
-     top:50%;
-     transform:translateY(-50%);
-     {% elsif section.settings.text_vertical_position_mobile == "top" %}
-     top:10px;
-         {% endif %}
-     {% endunless %}
-     width:100%;
-     text-align:center;
-  }
-
-.mobile-only-text-container{
-    padding:10px 15px;
-
-    display:flex;
-    flex-direction:column;
-    height:100%;
-    justify-content:center;
-    background-color: {{caption_content_BG}};
-    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
-    margin:10px;
-}
-
-.banner__heading_mobile{
-    font-size: 8vw;
-}
-
-.banner__subheading_mobile{
-    font-size:5vw !important;
-}
-
-.section-{{id}} h1{
-  font-size:55px !important;
-  line-height:65px !important;
-}
-
-@media only screen and (max-width: 1300px) {
-    .section-{{id}} h1{
-    font-size:40px !important;
-    line-height:50px !important;
-  }
-  .banner__subheading{
-      font-size: 22px !important;
-  }
-}
-
-@media only screen and (max-width: 1065px) {
-    .section-{{id}} h1{
-    font-size:35px !important;
-    line-height:45px !important;
-  }
-  .banner__subheading{
-      font-size: 18px !important;
-  }
-}
-
-@media only screen and (max-width: 900px) {
   .section-{{id}} h1{
-  font-size:30px !important;
-  line-height:40px !important;
+    font-size:55px !important;
+    line-height:65px !important;
   }
 
-  .banner__subheading{
-    font-size: 16px !important;
-  }
-}
-
-@media only screen and (max-width: 798px) {
-   .desktop-only-text {
-      display:none !important;
+  @media only screen and (max-width: 1300px) {
+      .section-{{id}} h1{
+      font-size:40px !important;
+      line-height:50px !important;
     }
-  .mobile-only-text{
-    display:block !important; 
-    min-width:0;
+    .banner__subheading{
+        font-size: 22px !important;
+    }
   }
 
-}
+  @media only screen and (max-width: 1065px) {
+      .section-{{id}} h1{
+      font-size:35px !important;
+      line-height:45px !important;
+    }
+    .banner__subheading{
+        font-size: 18px !important;
+    }
+  }
 
+  @media only screen and (max-width: 900px) {
+    .section-{{id}} h1{
+    font-size:30px !important;
+    line-height:40px !important;
+    }
+
+    .banner__subheading{
+      font-size: 16px !important;
+    }
+  }
+
+  @media only screen and (max-width: 798px) {
+     .desktop-only-text {
+        display:none !important;
+      }
+    .mobile-only-text{
+      display:block !important;
+      min-width:0;
+    }
+
+  }
 {% endstyle %}
 
 {% comment %} HTML markup {% endcomment %}
-<section class="section
-                section-{{id}}
-                {{ section.settings.css_class }}
-                is-width-{{ section.settings.width }}
-                under-overlay-menu
-                {% if mobile_text_below_media == true %}
-                  mobile-text--below-media
-                  {% else %}
-                  mobile-text--over-media
-                {% endif %}
-                {% if caption_border_alpha != 0 %}
-                  has-border
-                {% endif %}
-                "
-                {% if section.settings.animation != "none" %}
-                  data-scroll-class="{{ section.settings.animation }}"
-                {% endif %}>
-
-  <div class="container
-              image-with-text-overlay__container
-              {% if section.settings.width == 'wide' or section.settings.width == 'half' %}
-                equal-columns--outside-trim
-              {% endif %}">
+<section
+  class="
+    section
+    section-{{id}}
+    {{ section.settings.css_class }}
+    is-width-{{ section.settings.width }}
+    under-overlay-menu
+    {% if mobile_text_below_media == true %}
+      mobile-text--below-media
+      {% else %}
+      mobile-text--over-media
+    {% endif %}
+    {% if caption_border_alpha != 0 %}
+      has-border
+    {% endif %}
+  "
+  {% if section.settings.animation != 'none' %}
+    data-scroll-class="{{ section.settings.animation }}"
+  {% endif %}
+>
+  <div
+    class="
+      container
+      image-with-text-overlay__container
+      {% if section.settings.width == 'wide' or section.settings.width == 'half' %}
+        equal-columns--outside-trim
+      {% endif %}
+    "
+  >
     <div class="image-with-text-overlay__banner columns one-whole image-crop-{{ mobile_text_crop }}">
-
       {% if section.settings.mobile_image != blank %}
         {%- assign hide_mobile = 'is-hidden-mobile-only' -%}
       {% endif %}
-
-      {% if image != blank %}
-        {% render 'image-element',
-                image: image,
-                alt: image.alt,
-                stretch_width: true,
-                additional_classes: hide_mobile
-        %}
-      {% else %}
-          <div class="{{ hide_mobile }}">
-        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
-            
-          </div>
-      {% endif %}
-      
+      <div class="{{ hide_mobile }}">
+        {% if image != blank %}
+          {% render 'image-element',
+            image: image,
+            alt: image.alt,
+            stretch_width: true,
+            additional_classes: hide_mobile
+          %}
+        {% else %}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
 
       {% if section.settings.mobile_image != blank %}
         <div class="is-hidden-desktop-only">
           {% render 'image-element',
-                  image: section.settings.mobile_image,
-                  alt: section.settings.mobile_image.alt,
-                  stretch_width: true
+            image: section.settings.mobile_image,
+            alt: section.settings.mobile_image.alt,
+            stretch_width: true
           %}
         </div>
       {% endif %}
@@ -267,115 +264,110 @@ Last editted - 5/11/24
         <a href="{{ link }}" class="banner--full-link"></a>
       {% endif %}
 
-
       {% if pretext != blank or title != blank or subtitle != blank or button_1 != blank or button_2 != blank %}
         <div class="caption text-align-{{ section.settings.text_horizontal_position }} align-{{ section.settings.text_vertical_position }} desktop-only-text">
-            <div class="caption-content text-align-{{ section.settings.text_alignment }}">
-                {% if pretext != blank %}
-                <div class="image-with-text-overlay__preheading banner__subheading pretext subtitle">
-                    {{ pretext }}
-                </div>
-
-                {% endif %}
-                {% if title != blank %}
-                  {% if section.settings.heading_h1 %}
-                    <h1 class="image-with-text-overlay__heading banner__heading title">
-                        <span>{{ title }}</span>
-                    </h1>
-                  {% else %}
-                    <h2 class="image-with-text-overlay__heading banner__heading title">
-                        <span>{{ title }}</span>
-                    </h2>
-                  {% endif %}     
-                {% endif %}
-
-                {% if subtitle != blank %}
-                <div class="image-with-text-overlay__subheading banner__subheading subtitle" style="padding-bottom:5px;">
-                    {{ subtitle }}
-                </div>
-                {% endif %}
-                {% if button_1 != blank or button_2 != blank %}
-                <div class="image-with-text-overlay__buttons buttons {% unless buttons == true %}is-justify-{{ section.settings.text_alignment }}{% endunless %}">
-
-                {% if button_1 != blank %}
-                    {% render 'button',
-                            label: button_1,
-                            href: button_1_link,
-                            type: "link",
-                            style: section.settings.button_1_style
-                    %}
-                {% endif %}
-                {% if button_2 != blank %}
-                    {% render 'button',
-                            label: button_2,
-                            href: button_2_link,
-                            type: "link",
-                            style: section.settings.button_2_style
-                    %}
-                {% endif %}
-
-                </div>
-                {% endif %}
-            </div>
-        </div>
-      {% endif %}
-
-
-      {% if pretext_mobile != blank or title_mobile != blank or subtitle_mobile != blank or button_1 != blank or button_2 != blank %}
-        <div class="mobile-only-text">
-            <div class="mobile-only-text-container text-align-{{ section.settings.text_alignment }}">
-                {% if pretext_mobile != blank %}
-                <div class="image-with-text-overlay__preheading banner__subheading pretext subtitle">
-                    {{ pretext_mobile }}
-                </div>
-                {% endif %}
-                {% if title_mobile != blank %}
-                <h2 class="image-with-text-overlay__heading banner__heading_mobile title">
-                    <span>{{ title_mobile }}</span>
+          <div class="caption-content text-align-{{ section.settings.text_alignment }}">
+            {% if pretext != blank %}
+              <div class="image-with-text-overlay__preheading banner__subheading pretext subtitle">
+                {{ pretext }}
+              </div>
+            {% endif %}
+            {% if title != blank %}
+              {% if section.settings.heading_h1 %}
+                <h1 class="image-with-text-overlay__heading banner__heading title">
+                  <span>{{ title }}</span>
+                </h1>
+              {% else %}
+                <h2 class="image-with-text-overlay__heading banner__heading title">
+                  <span>{{ title }}</span>
                 </h2>
-                {% endif %}
-                {% if subtitle_mobile != blank %}
-                <div class="image-with-text-overlay__subheading banner__subheading_mobile subtitle">
-                    {{ subtitle_mobile }}
-                </div>
-                {% endif %}
-                {% if button_1 != blank or button_2 != blank %}
+              {% endif %}
+            {% endif %}
 
-                <div class="image-with-text-overlay__buttons buttons {% unless buttons == true %}is-justify-{{ section.settings.text_alignment }}{% endunless %}">
+            {% if subtitle != blank %}
+              <div class="image-with-text-overlay__subheading banner__subheading subtitle" style="padding-bottom:5px;">
+                {{ subtitle }}
+              </div>
+            {% endif %}
+            {% if button_1 != blank or button_2 != blank %}
+              <div class="image-with-text-overlay__buttons buttons {% unless buttons == true %}is-justify-{{ section.settings.text_alignment }}{% endunless %}">
                 {% if button_1 != blank %}
-                    {% render 'button',
-                            label: button_1,
-                            href: button_1_link,
-                            type: "link",
-                            style: section.settings.button_1_style
-                    %}
+                  {% render 'button',
+                    label: button_1,
+                    href: button_1_link,
+                    type: 'link',
+                    style: section.settings.button_1_style
+                  %}
                 {% endif %}
                 {% if button_2 != blank %}
-                    {% render 'button',
-                            label: button_2,
-                            href: button_2_link,
-                            type: "link",
-                            style: section.settings.button_2_style
-                    %}
+                  {% render 'button',
+                    label: button_2,
+                    href: button_2_link,
+                    type: 'link',
+                    style: section.settings.button_2_style
+                  %}
                 {% endif %}
-
-                </div>
-                {% endif %}
-            </div>
+              </div>
+            {% endif %}
+          </div>
         </div>
       {% endif %}
 
-
+      {% if pretext_mobile != blank
+        or title_mobile != blank
+        or subtitle_mobile != blank
+        or button_1 != blank
+        or button_2 != blank
+      %}
+        <div class="mobile-only-text">
+          <div class="mobile-only-text-container text-align-{{ section.settings.text_alignment }}">
+            {% if pretext_mobile != blank %}
+              <div class="image-with-text-overlay__preheading banner__subheading pretext subtitle">
+                {{ pretext_mobile }}
+              </div>
+            {% endif %}
+            {% if title_mobile != blank %}
+              <h2 class="image-with-text-overlay__heading banner__heading_mobile title">
+                <span>{{ title_mobile }}</span>
+              </h2>
+            {% endif %}
+            {% if subtitle_mobile != blank %}
+              <div class="image-with-text-overlay__subheading banner__subheading_mobile subtitle">
+                {{ subtitle_mobile }}
+              </div>
+            {% endif %}
+            {% if button_1 != blank or button_2 != blank %}
+              <div class="image-with-text-overlay__buttons buttons {% unless buttons == true %}is-justify-{{ section.settings.text_alignment }}{% endunless %}">
+                {% if button_1 != blank %}
+                  {% render 'button',
+                    label: button_1,
+                    href: button_1_link,
+                    type: 'link',
+                    style: section.settings.button_1_style
+                  %}
+                {% endif %}
+                {% if button_2 != blank %}
+                  {% render 'button',
+                    label: button_2,
+                    href: button_2_link,
+                    type: 'link',
+                    style: section.settings.button_2_style
+                  %}
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
-
 
 {% schema %}
 {
   "name": "JP Image with txt overlay",
   "class": "image-with-text-overlay overlaid-header-option",
-  "templates":["index", "page", "blog", "article", "collection", "product", "cart"],
+  "templates": ["index", "page", "blog", "article", "collection", "product", "cart"],
   "settings": [
     {
       "type": "url",
@@ -550,7 +542,7 @@ Last editted - 5/11/24
       "label": "Use H1 for heading",
       "default": false
     },
-   {    
+    {
       "type": "select",
       "id": "text_alignment",
       "label": "Text alignment",
