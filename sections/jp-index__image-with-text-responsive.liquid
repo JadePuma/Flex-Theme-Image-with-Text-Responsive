@@ -190,7 +190,7 @@
 
   .mobile-only-text-container{
       padding:10px 15px;
-
+      max-width:100%;
       display:flex;
       flex-direction:column;
       height:100%;
@@ -213,6 +213,8 @@
     font-size:{{ ss.banner_heading_size }} !important;
     /* line-height:65px !important; */
   }
+
+
 
   @media only screen and (max-width: 798px) {
      .desktop-only-text {
@@ -458,7 +460,7 @@
       {
       "type": "select",
       "id": "text_alignment",
-      "label": "Text Alignment",
+      "label": "Text alignment",
       "options": [
 
         {
@@ -479,7 +481,7 @@
     {
       "type": "select",
       "id": "text_horizontal_position",
-      "label": "Horizontal position",
+      "label": "Horizontal text position",
       "options": [
         {
           "value": "left",
@@ -499,7 +501,7 @@
     {
       "type": "select",
       "id": "text_vertical_position",
-      "label": "Vertical position",
+      "label": "Vertical text position",
       "options": [
         {
           "value": "top",
@@ -577,12 +579,9 @@
         {
       "type": "select",
       "id": "text_alignment_mobile",
-      "label": "Text Alignment",
+      "label": "Text alignment",
       "options": [
-        {
-          "value": "same_as_desktop",
-          "label": "Same as desktop"
-        },
+        //{ "value": "same_as_desktop", "label": "Same as desktop" },
         {
           "value": "left",
           "label": "Left"
@@ -596,17 +595,17 @@
           "label": "Right"
         }
       ],
-      "default": "same_as_desktop"
+      "default": "center"
     },
     {
       "type": "select",
       "id": "text_horizontal_position_mobile",
-      "label": "Horizontal position",
+      "label": "Horizontal text position",
       "options": [
-                {
-          "value": "same_as_desktop",
-          "label": "Same as desktop"
-        },
+              //  {
+          //"value": "same_as_desktop",
+         // "label": "Same as desktop"
+        //},
         {
           "value": "left",
           "label": "Left"
@@ -620,17 +619,17 @@
           "label": "Right"
         }
       ],
-      "default": "same_as_desktop"
+      "default": "center"
     },
     {
       "type": "select",
       "id": "text_vertical_position_mobile",
       "label": "Vertical text position",
       "options": [
-                {
-          "value": "same_as_desktop",
-          "label": "Same as desktop"
-        },
+//                {
+  //        "value": "same_as_desktop",
+     //     "label": "Same as desktop"
+       // },
         {
           "value": "top",
           "label": "Top"
@@ -644,7 +643,7 @@
           "label": "Bottom"
         }
       ],
-      "default": "same_as_desktop"
+      "default": "middle"
     },
        
     {
