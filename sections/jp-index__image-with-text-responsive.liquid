@@ -28,6 +28,7 @@
   {%- assign buttons = false -%}
 {% endif %}
 
+
 {% comment %} Is the color set to transparent? {% endcomment %}
 {%- assign background_color_alpha = section.settings.background_opacity | divided_by: 100.00 -%}
 {%- assign heading_alpha = section.settings.heading_color | color_extract: 'alpha' -%}
@@ -272,7 +273,8 @@
             image: image,
             alt: image.alt,
             stretch_width: true,
-            additional_classes: hide_mobile
+            additional_classes: hide_mobile,
+            force_priority: section.settings.force_priority
           %}
         {% else %}
           {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -284,7 +286,8 @@
           {% render 'image-element',
             image: section.settings.mobile_image,
             alt: section.settings.mobile_image.alt,
-            stretch_width: true
+            stretch_width: true,
+            force_priority: section.settings.force_priority
           %}
         </div>
       {% endif %}
@@ -419,6 +422,13 @@
       "id": "image",
       "label": "Image",
       "info": "1800 x 900px recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "force_priority",
+      "label": "Load Image Immediately",
+      "info": "Apply this to images that are above the fold but not in the first section of the template",
+      "default": false
     },
     {
       "type": "richtext",
